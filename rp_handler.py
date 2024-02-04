@@ -178,23 +178,27 @@ def sync(job):
 # ---------------------------------------------------------------------------- #
 def handler(job):
     validated_input = validate_input(job)
+    user_id = validated_input["user_id"]
+    bot_id = validated_input["bot_id"]
+
+    final_response = {}
 
     if 'errors' in validated_input:
-        return {
+        final_response = {
             'error': '\n'.join(validated_input['errors'])
         }
 
     validated_api = validate_api(job)
 
     if 'errors' in validated_api:
-        return {
+        final_response = {
             'error': '\n'.join(validated_api['errors'])
         }
 
     endpoint, method, validated_payload = validate_payload(job)
 
     if 'errors' in validated_payload:
-        return {
+        final_response = {
             'error': '\n'.join(validated_payload['errors'])
         }
 
@@ -216,22 +220,28 @@ def handler(job):
             response = send_post_request(endpoint, payload, job['id'])
 
         if response.status_code == 200:
-            return response.json()
+            final_response = response.json()
+            
         else:
             logger.error(f'HTTP Status code: {response.status_code}', job['id'])
             logger.error(f'Response: {response.text}', job['id'])
 
-            return {
+            final_response = {
                 'error': response.json(),
                 'refresh_worker': True
             }
     except Exception as e:
         logger.error(f'An exception was raised: {e}')
 
-        return {
+        final_response = {
             'error': traceback.format_exc(),
             'refresh_worker': True
         }
+    
+    # Add user and bot ids to final response
+    final_response['user_id'] = user_id
+    final_response['bot_id'] = bot_id
+    return final_response
 
 
 if __name__ == "__main__":
