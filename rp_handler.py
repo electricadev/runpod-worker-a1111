@@ -178,8 +178,6 @@ def sync(job):
 # ---------------------------------------------------------------------------- #
 def handler(job):
     validated_input = validate_input(job)
-    user_id = validated_input["user_id"]
-    bot_id = validated_input["bot_id"]
 
     final_response = {}
 
@@ -207,6 +205,9 @@ def handler(job):
     else:
         payload = validated_payload
 
+    user_id = job["input"]["user_id"]
+    bot_id = job["input"]["bot_id"]
+    
     try:
         logger.info(f'Sending {method} request to: /{endpoint}', job['id'])
 
