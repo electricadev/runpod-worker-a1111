@@ -177,6 +177,9 @@ def sync(job):
 #                                RunPod Handler                                #
 # ---------------------------------------------------------------------------- #
 def handler(job):
+
+    # Remove the @type param that Jackson adds to the payload
+    job['input']['payload'].pop('@type', None)
     validated_input = validate_input(job)
 
     final_response = {}
