@@ -210,6 +210,7 @@ def handler(job):
 
     user_id = job["input"]["user_id"]
     bot_id = job["input"]["bot_id"]
+    request_time = job["input"]["request_time"]
     
     try:
         logger.info(f'Sending {method} request to: /{endpoint}', job['id'])
@@ -245,6 +246,7 @@ def handler(job):
     # Add user and bot ids to final response
     final_response['user_id'] = user_id
     final_response['bot_id'] = bot_id
+    final_response['request_time'] = request_time
     return final_response
 
 

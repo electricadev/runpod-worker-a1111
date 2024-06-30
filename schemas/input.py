@@ -15,4 +15,8 @@ INPUT_SCHEMA = {
         "type": str,
         "required": True
     },
+    "request_time": {
+        "type": int,
+        "required": True
+    }
 }
